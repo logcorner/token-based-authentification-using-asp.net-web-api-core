@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace MyCodeCamp.Filters
 {
-  public class ValidateModelAttribute : ActionFilterAttribute
+  public class ValidateFormAttribute : ActionFilterAttribute
   {
     public override void OnActionExecuting(ActionExecutingContext context)
     {

@@ -61,7 +61,7 @@ namespace Angular2TokenAuthWebApiCore.Controllers.Web
 			return BadRequest(result.Errors);
 		}
 
-		[ValidateModel]
+		[ValidateForm]
 		[HttpPost("CreateToken")]
 		[Route("token")]
 		public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)

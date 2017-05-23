@@ -8,12 +8,16 @@ using Microsoft.EntityFrameworkCore;
 using TokenAuthWebApiCore.Server.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TokenAuthWebApiCore.Server
 {
 	public class Startup
     {
-        public Startup(IHostingEnvironment env)
+		public IConfigurationRoot Configuration { get; }
+
+		public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -22,8 +26,6 @@ namespace TokenAuthWebApiCore.Server
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-
-        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -59,19 +61,26 @@ namespace TokenAuthWebApiCore.Server
             loggerFactory.AddDebug();
 			app.UseIdentity();
 
+			app.UseJwtBearerAuthentication(new JwtBearerOptions()
+			{
+				AutomaticAuthenticate = true,
+				AutomaticChallenge = true,
+				TokenValidationParameters = new TokenValidationParameters()
+				{
+					ValidIssuer = Configuration["JwtSecurityToken:Issuer"],
+					ValidAudience = Configuration["JwtSecurityToken:Audience"],
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityToken:Key"])),
+					ValidateLifetime = true
+				}
+			});
+
 			//app.UseMvc();
 			app.UseMvc(routes =>
 			{
 				
 			});
-			//app.UseCookieAuthentication(new CookieAuthenticationOptions
-			//{
-			//	AuthenticationScheme = "Cookie",
-			//	LoginPath = new PathString("/Account/Login"),
-			//	AccessDeniedPath = new PathString("/Account/Login"),
-			//	AutomaticAuthenticate = true,
-			//	AutomaticChallenge = true
-			//});
+			
 		}
     }
 }
