@@ -28,8 +28,9 @@ namespace TokenAuthWebApiCore.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
+			services.AddSingleton(Configuration);
+			// Add framework services.
+			services.AddMvc();
 
 			services.AddDbContext<SecurityContext>(options =>
 					options.UseSqlServer(Configuration.GetConnectionString("SecurityConnection"), sqlOptions => sqlOptions.MigrationsAssembly("TokenAuthWebApiCore.Server")));

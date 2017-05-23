@@ -4,21 +4,39 @@ using Microsoft.AspNetCore.Mvc;
 using TokenAuthWebApiCore.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Angular2TokenAuthWebApiCore.Models;
+using MyCodeCamp.Filters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Net;
 
 namespace Angular2TokenAuthWebApiCore.Controllers.Web
 {
 	[Route("api/auth")]
 	public class AuthController : Controller
     {
-		private readonly UserManager<MyUser> userManager;
-		private readonly SignInManager<MyUser> signInManager;
-		private readonly RoleManager<MyRole> roleManager;
+		private readonly UserManager<MyUser> _userManager;
+		private readonly SignInManager<MyUser> _signInManager;
+		private readonly RoleManager<MyRole> _roleManager;
+		private IPasswordHasher<MyUser> _passwordHasher;
+		private IConfigurationRoot _configurationRoot;
+		private ILogger<AuthController> _logger;
 
-		public AuthController(UserManager<MyUser> userManager, SignInManager<MyUser> signInManager, RoleManager<MyRole> roleManager)
+
+		public AuthController(UserManager<MyUser> userManager, SignInManager<MyUser> signInManager, RoleManager<MyRole> roleManager
+			, IPasswordHasher<MyUser> passwordHasher, IConfigurationRoot configurationRoot, ILogger<AuthController> logger)
 		{
-			this.userManager = userManager;
-			this.signInManager = signInManager;
-			this.roleManager = roleManager;
+			_userManager = userManager;
+			_signInManager = signInManager;
+			_roleManager = roleManager;
+			_logger = logger;
+			_passwordHasher = passwordHasher;
+			_configurationRoot = configurationRoot;
 		}
 		[AllowAnonymous]
 		[HttpPost]
@@ -33,7 +51,7 @@ namespace Angular2TokenAuthWebApiCore.Controllers.Web
 				UserName = model.Email,
 				Email = model.Email
 			};
-			var result = await userManager.CreateAsync(user, model.Password);
+			var result = await _userManager.CreateAsync(user, model.Password);
 			
 			if (result.Succeeded)
 				return Ok(result);
@@ -43,57 +61,52 @@ namespace Angular2TokenAuthWebApiCore.Controllers.Web
 			return BadRequest(result.Errors);
 		}
 
-		[AllowAnonymous]
-		[HttpGet]
-		public IActionResult Login(string returnUrl = null)
+		[ValidateModel]
+		[HttpPost("CreateToken")]
+		[Route("token")]
+		public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
 		{
-			ViewData["ReturnUrl"] = returnUrl;
-			return View();
-		}
-
-		[AllowAnonymous]
-		[HttpPost("api/auth/Login")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-		{
-			ViewData["ReturnUrl"] = returnUrl;
-			if (ModelState.IsValid)
+			try
 			{
-				var result =
-					await
-						signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
-							lockoutOnFailure: false);
-				if (result.Succeeded)
-					return RedirectToLocal(returnUrl);
-				if (result.RequiresTwoFactor)
+				var user = await _userManager.FindByNameAsync(model.Email);
+				if(user == null)
 				{
-					//
+					return Unauthorized();
 				}
-				if (result.IsLockedOut)
-				{
-					return View("Lockout");
-				}
+					if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) == PasswordVerificationResult.Success)
+					{
+						var userClaims = await _userManager.GetClaimsAsync(user);
 
-				ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-				return View(model);
+						var claims = new[]
+						{
+						  new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+						  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+						  new Claim(JwtRegisteredClaimNames.Email, user.Email)
+						}.Union(userClaims);
+
+						var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configurationRoot["JwtSecurityToken:Key"]));
+						var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+						var jwtSecurityToken = new JwtSecurityToken(
+						  issuer: _configurationRoot["JwtSecurityToken:Issuer"],
+						  audience: _configurationRoot["JwtSecurityToken:Audience"],
+						  claims: claims,
+						  expires: DateTime.UtcNow.AddMinutes(60),
+						  signingCredentials: signingCredentials
+						  );
+						return Ok(new
+						{
+							token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+							expiration = jwtSecurityToken.ValidTo
+						});
+					}
+				return Unauthorized();
 			}
-			return View(model);
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> LogOff()
-		{
-			await signInManager.SignOutAsync();
-			return View("LoggedOut");
-		}
-
-		private IActionResult RedirectToLocal(string returnUrl)
-		{
-			if (Url.IsLocalUrl(returnUrl))
+			catch (Exception ex)
 			{
-				return Redirect(returnUrl);
+				_logger.LogError($"error while creating token: {ex}");
+				return StatusCode((int)HttpStatusCode.InternalServerError, "error while creating token");
 			}
-			return RedirectToAction("Index", "Conference");
 		}
 	}
 }
