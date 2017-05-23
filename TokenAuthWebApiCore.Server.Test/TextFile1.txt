@@ -1,0 +1,5 @@
+﻿{
+	"Email":"simpleuser@yopmail.com",
+	"Password" :"WebApiCore1#",
+	"ConfirmPassword":"WebApiCore1#"
+}

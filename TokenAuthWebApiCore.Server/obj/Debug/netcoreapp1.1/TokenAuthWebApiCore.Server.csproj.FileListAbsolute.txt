@@ -1,0 +1,8 @@
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.deps.json
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.runtimeconfig.json
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.runtimeconfig.dev.json
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.dll
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.pdb
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.AssemblyInfo.cs
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.dll
+C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.pdb

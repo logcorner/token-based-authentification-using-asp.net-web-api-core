@@ -1,0 +1,43 @@
+﻿@using Angular2TokenAuthWebApiCore.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+<!DOCTYPE html>
+@using UsingCustomModels.Models
+@inject SignInManager<MyUser> SignInManager
+@inject UserManager<MyUser> UserManager
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href="~/site.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">
+				@*<img src="~/img/ConfArchSmall.png" style="max-width:100%" />*@
+			</div>
+			<div class="col-md-7 titlecol">
+				<span class="title">@ViewBag.Title</span>
+			</div>
+
+			<div class="col-md-2">
+				@if (SignInManager.IsSignedIn(User))
+				{
+					<span>@UserManager.GetUserName(User)</span>
+					<a class="btn btn-primary" asp-controller="Account" asp-action="Logoff">Log off</a>
+				}
+				else
+				{
+					<a class="btn btn-primary" asp-controller="Account" asp-action="Register">Register</a>
+				}
+			</div>
+		</div>
+		<div>
+			@RenderBody()
+		</div>
+	</div>
+</body>
+</html>
