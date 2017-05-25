@@ -34,6 +34,8 @@ namespace TokenAuthWebApiCore.Server
 			// Add framework services.
 			services.AddMvc();
 
+			//services.AddDbContext<SecurityContext>(opt => opt.UseInMemoryDatabase());
+
 			services.AddDbContext<SecurityContext>(options =>
 					options.UseSqlServer(Configuration.GetConnectionString("SecurityConnection"), sqlOptions => sqlOptions.MigrationsAssembly("TokenAuthWebApiCore.Server")));
 			services.AddIdentity<MyUser, MyRole>(cfg =>
