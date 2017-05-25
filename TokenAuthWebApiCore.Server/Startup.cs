@@ -16,10 +16,12 @@ namespace TokenAuthWebApiCore.Server
 	public class Startup
     {
 		public IConfigurationRoot Configuration { get; }
-
+		private IHostingEnvironment _env;
 		public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
+			_env = env;
+
+			var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
@@ -34,10 +36,15 @@ namespace TokenAuthWebApiCore.Server
 			// Add framework services.
 			services.AddMvc();
 
-			//services.AddDbContext<SecurityContext>(opt => opt.UseInMemoryDatabase());
-
-			services.AddDbContext<SecurityContext>(options =>
+			if (_env.IsEnvironment("Development") || _env.IsEnvironment("Testing"))
+			{
+				services.AddDbContext<SecurityContext>(opt => opt.UseInMemoryDatabase());
+			}
+			else
+			{
+				services.AddDbContext<SecurityContext>(options =>
 					options.UseSqlServer(Configuration.GetConnectionString("SecurityConnection"), sqlOptions => sqlOptions.MigrationsAssembly("TokenAuthWebApiCore.Server")));
+			}
 			services.AddIdentity<MyUser, MyRole>(cfg =>
 			{
 				// if we are accessing the /api and an unauthorized request is made

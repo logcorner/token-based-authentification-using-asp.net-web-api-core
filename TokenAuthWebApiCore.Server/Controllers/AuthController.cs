@@ -43,20 +43,24 @@ namespace TokenAuthWebApiCore.Server.Controllers.Web
 		public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
 		{
 			if (!ModelState.IsValid)
+			{
 				return BadRequest();
-
+			}
 			var user = new MyUser()
 			{
 				UserName = model.Email,
 				Email = model.Email
 			};
 			var result = await _userManager.CreateAsync(user, model.Password);
-			
-			if (result.Succeeded)
-				return Ok(result);
 
+			if (result.Succeeded)
+			{
+				return Ok(result);
+			}
 			foreach (var error in result.Errors)
+			{
 				ModelState.AddModelError("error", error.Description);
+			}
 			return BadRequest(result.Errors);
 		}
 
@@ -93,7 +97,7 @@ namespace TokenAuthWebApiCore.Server.Controllers.Web
 						  expires: DateTime.UtcNow.AddMinutes(60),
 						  signingCredentials: signingCredentials
 						  );
-						return Ok(new
+						return Ok(new 
 						{
 							token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
 							expiration = jwtSecurityToken.ValidTo

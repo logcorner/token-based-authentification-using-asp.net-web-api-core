@@ -10,32 +10,13 @@ namespace TokenAuthWebApiCore.Server.IntegrationTest
 {
 	public class AuthController_RegisterUserTest : IClassFixture<TestFixture<Startup>>
 	{
+		public HttpClient Client { get; }
+
 		public AuthController_RegisterUserTest(TestFixture<Startup> fixture)
 		{
 			Client = fixture.httpClient;
 		}
 
-		public HttpClient Client { get; }
-
-		//[Theory]
-		//[InlineData("GET")]
-		//[InlineData("HEAD")]
-		//[InlineData("POST")]
-		//public async Task AllMethods_RemovesServerHeader(string method)
-		//{
-		//	// Arrange
-		//	var request = new HttpRequestMessage(new HttpMethod("GET"), "/api/values");
-
-		//	// Act
-		//	var response = await Client.SendAsync(request);
-
-		//	// Assert
-		//	Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-		//	var content = await response.Content.ReadAsStringAsync();
-
-		//	Assert.Equal("Test response", content);
-		//	Assert.False(response.Headers.Contains("Server"), "Should not contain server header");
-		//}
 		[Theory]
 		[InlineData("", "", "")]
 		[InlineData("", "WebApiCore1#", "WebApiCore1#")]
@@ -60,6 +41,24 @@ namespace TokenAuthWebApiCore.Server.IntegrationTest
 
 			// Assert
 			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+		}
+		[Fact]
+		public async Task WhenNoRegisteredUser_SignUp_WithValidModelState_Return_OK()
+		{
+			// Arrange
+			var obj = new RegisterViewModel
+			{
+				Email = "simpleuser@yopmail.com",
+				Password = "WebApiCore1#",
+				ConfirmPassword = "WebApiCore1#"
+			};
+			string stringData = JsonConvert.SerializeObject(obj);
+			var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
+			// Act
+			var response = await Client.PostAsync($"/api/auth/register", contentData);
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 		}
 	}
 }
