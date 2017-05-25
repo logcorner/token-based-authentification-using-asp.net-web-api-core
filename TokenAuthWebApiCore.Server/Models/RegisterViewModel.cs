@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Angular2TokenAuthWebApiCore.Models
+namespace TokenAuthWebApiCore.Server.Models
 {
-    public class RegisterViewModel
+	public class RegisterViewModel
     {
         [Required]
         [EmailAddress]
@@ -20,7 +19,5 @@ namespace Angular2TokenAuthWebApiCore.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
- 
     }
 }

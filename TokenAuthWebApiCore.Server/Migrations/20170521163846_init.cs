@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TokenAuthWebApiCore.Server.Migrations
 {
-    public partial class init : Migration
+	public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

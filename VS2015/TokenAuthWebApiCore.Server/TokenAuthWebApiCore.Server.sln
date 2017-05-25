@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B56ABF76-DFB0-4CAF-AC8D-E11F9B91CA25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FD49624-8C79-4A5D-A938-C42DDD322AC6}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TokenAuthWebApiCore.Server", "src\TokenAuthWebApiCore.Server\TokenAuthWebApiCore.Server.xproj", "{234EAADC-F51A-4330-847F-8269F20FBBAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{234EAADC-F51A-4330-847F-8269F20FBBAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{234EAADC-F51A-4330-847F-8269F20FBBAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{234EAADC-F51A-4330-847F-8269F20FBBAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{234EAADC-F51A-4330-847F-8269F20FBBAF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{234EAADC-F51A-4330-847F-8269F20FBBAF} = {B56ABF76-DFB0-4CAF-AC8D-E11F9B91CA25}
+	EndGlobalSection
+EndGlobal

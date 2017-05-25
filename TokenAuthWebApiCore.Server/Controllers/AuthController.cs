@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TokenAuthWebApiCore.Server.Models;
 using Microsoft.AspNetCore.Authorization;
-using Angular2TokenAuthWebApiCore.Models;
-using MyCodeCamp.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
@@ -14,8 +12,9 @@ using System;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Net;
+using TokenAuthWebApiCore.Server.Filters;
 
-namespace Angular2TokenAuthWebApiCore.Controllers.Web
+namespace TokenAuthWebApiCore.Server.Controllers.Web
 {
 	[Route("api/auth")]
 	public class AuthController : Controller

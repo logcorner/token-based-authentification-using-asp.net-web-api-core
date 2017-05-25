@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Angular2TokenAuthWebApiCore.Models
+namespace TokenAuthWebApiCore.Server.Models
 {
     public class LoginViewModel
     {
