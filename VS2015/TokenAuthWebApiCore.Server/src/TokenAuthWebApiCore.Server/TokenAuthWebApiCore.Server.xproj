@@ -6,7 +6,7 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>234eaadc-f51a-4330-847f-8269f20fbbaf</ProjectGuid>
+    <ProjectGuid>a58852bc-c63c-4f50-b549-f867fc408db8</ProjectGuid>
     <RootNamespace>TokenAuthWebApiCore.Server</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
