@@ -7,8 +7,8 @@
 -debug:full
 -nostdlib
 -nologo
-"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\dotnet-compile.assemblyinfo.cs"
--out:"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.0\TokenAuthWebApiCore.Server.dll"
+"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\dotnet-compile.assemblyinfo.cs"
+-out:"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\src\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.0\TokenAuthWebApiCore.Server.dll"
 -r:"C:\Users\TOCANE\.nuget\packages\Microsoft.ApplicationInsights\2.2.0\lib\netstandard1.5\Microsoft.ApplicationInsights.dll"
 -r:"C:\Users\TOCANE\.nuget\packages\Microsoft.ApplicationInsights.AspNetCore\2.0.0\lib\netstandard1.6\Microsoft.ApplicationInsights.AspNetCore.dll"
 -r:"C:\Users\TOCANE\.nuget\packages\Microsoft.AspNetCore.Antiforgery\1.0.1\lib\netstandard1.3\Microsoft.AspNetCore.Antiforgery.dll"
@@ -213,7 +213,7 @@
 -r:"C:\Users\TOCANE\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll"
 -r:"C:\Users\TOCANE\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll"
 -r:"C:\Users\TOCANE\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll"
--resource:"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\TokenAuthWebApiCore.Serverdotnet-compile.deps.json",TokenAuthWebApiCore.Server.deps.json
+-resource:"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\TokenAuthWebApiCore.Serverdotnet-compile.deps.json",TokenAuthWebApiCore.Server.deps.json
 "C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\Program.cs"
 "C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\SecurityContext.cs"
 "C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\Startup.cs"

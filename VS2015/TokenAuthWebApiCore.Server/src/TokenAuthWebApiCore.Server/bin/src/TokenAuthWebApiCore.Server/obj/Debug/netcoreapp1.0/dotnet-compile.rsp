@@ -1,5 +1,5 @@
---temp-output:C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\
---out:C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.0\TokenAuthWebApiCore.Server.dll
+--temp-output:C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\
+--out:C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\src\TokenAuthWebApiCore.Server\bin\Debug\netcoreapp1.0\TokenAuthWebApiCore.Server.dll
 --define:DEBUG
 --define:TRACE
 --define:NETCOREAPP1_0
@@ -217,7 +217,7 @@
 --reference:C:\Users\TOCANE\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll
 --reference:C:\Users\TOCANE\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\TOCANE\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll
---resource:"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\TokenAuthWebApiCore.Serverdotnet-compile.deps.json",TokenAuthWebApiCore.Server.deps.json
+--resource:"C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\bin\src\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.0\TokenAuthWebApiCore.Serverdotnet-compile.deps.json",TokenAuthWebApiCore.Server.deps.json
 C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\Program.cs
 C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\SecurityContext.cs
 C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2015\TokenAuthWebApiCore.Server\src\TokenAuthWebApiCore.Server\Startup.cs
