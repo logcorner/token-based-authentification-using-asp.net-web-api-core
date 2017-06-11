@@ -15,4 +15,3 @@ C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2017\TokenAuthWebApiCore.Server\bin\Deb
 C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2017\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.AssemblyInfo.cs
 C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2017\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.dll
 C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2017\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.pdb
-C:\TEAMPROJECT\GIT\TokenAuthWebApiCore\VS2017\TokenAuthWebApiCore.Server\obj\Debug\netcoreapp1.1\TokenAuthWebApiCore.Server.csprojResolveAssemblyReference.cache

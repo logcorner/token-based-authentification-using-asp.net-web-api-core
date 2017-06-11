@@ -9,16 +9,36 @@ using Xunit;
 
 namespace TokenAuthWebApiCore.Server.IntegrationTest
 {
-	public class ValuesController_AuthorizedTest  : IClassFixture<TestFixture<Startup>>
+	[TestCaseOrderer("TokenAuthWebApiCore.Server.IntegrationTest.Setup.PriorityOrderer", "TokenAuthWebApiCore.Server.IntegrationTest")]
+	public class ValuesController_AuthorizedTest  : IClassFixture<TestFixture<TestStartup>>
 	{
-		public ValuesController_AuthorizedTest(TestFixture<Startup> fixture)
+		public ValuesController_AuthorizedTest(TestFixture<TestStartup> fixture)
 		{
 			Client = fixture.httpClient;
 		}
 
 		public HttpClient Client { get; }
 
-		[Theory]
+		[Fact, TestPriority(1)]
+		public async Task WhenNoRegisteredUser_SignUpForToken_WithValidModelState_Return_OK()
+		{
+			// Arrange
+			var obj = new RegisterViewModel
+			{
+				Email = "simpleuser@yopmail.com",
+				Password = "WebApiCore1#",
+				ConfirmPassword = "WebApiCore1#"
+			};
+			string stringData = JsonConvert.SerializeObject(obj);
+			var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
+			// Act
+			var response = await Client.PostAsync($"/api/auth/register", contentData);
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		}
+
+		[Theory, TestPriority(2)]
 		[InlineData("POST","myRequestBody")]
 		[InlineData("GET", "myRequestBody")]
 		[InlineData(new object[] { "PUT", "myRequestBody", 1 })]

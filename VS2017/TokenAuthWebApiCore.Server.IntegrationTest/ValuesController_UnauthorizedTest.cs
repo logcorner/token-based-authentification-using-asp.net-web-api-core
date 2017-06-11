@@ -5,9 +5,9 @@ using TokenAuthWebApiCore.Server.IntegrationTest.Setup;
 using Xunit;
 namespace TokenAuthWebApiCore.Server.IntegrationTest
 {
-	public class ValuesController_UnauthorizedTest : IClassFixture<TestFixture<Startup>>
+	public class ValuesController_UnauthorizedTest : IClassFixture<TestFixture<TestStartup>>
 	{
-		public ValuesController_UnauthorizedTest(TestFixture<Startup> fixture)
+		public ValuesController_UnauthorizedTest(TestFixture<TestStartup> fixture)
 		{
 			Client = fixture.httpClient;
 		}
