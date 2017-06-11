@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule
+    Name="ResolvedProjectReference"
+    DisplayName="Reference Properties"
+    PageTemplate="generic"
+    Description="Reference Properties"
+    xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+    <Rule.Categories>
+        <Category Name="Misc" DisplayName="Misc" />
+        <Category Name="OutputInclude" DisplayName="Output Include" />
+    </Rule.Categories>
+    
+    <Rule.DataSource>
+        <DataSource Persistence="ResolvedReference" ItemType="ProjectReference" HasConfigurationCondition="False" 
+                    SourceType="TargetResults" MSBuildTarget="ResolveProjectReferencesDesignTime" />
+    </Rule.DataSource>
+
+    <StringProperty Name="IncludeFilePath" 
+                    Category="OutputInclude"
+                    DisplayName="Include File Path" 
+                    Description="The file path to the reference project's output to be included.">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" ItemType="ProjectReference" HasConfigurationCondition="False" PersistedName="IncludeFilePath" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+    <StringProperty Name="AdditionalProperties" 
+                    Category="OutputInclude"
+                    DisplayName="Additional Properties"
+                    Description="Additional MSBuild property assignments to use when building the referenced project.">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" ItemType="ProjectReference" HasConfigurationCondition="False" PersistedName="AdditionalProperties" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+    <StringProperty Name="IncludeTargets" 
+                    Category="OutputInclude"
+                    DisplayName="Include Targets" 
+                    Description="A semi-colon delimited list of MSBuild Target names to invoke on the referenced project during a build."
+                    Separator=";">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" ItemType="ProjectReference" HasConfigurationCondition="False" PersistedName="Targets" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+    <BoolProperty Name="CopyLocal"
+                  Category="Misc"
+                  DisplayName="Copy Local"
+                  Description="Indicates whether the reference will be copied to the output directory.">
+        <BoolProperty.DataSource>
+            <DataSource Persistence="ProjectFile" ItemType="ProjectReference" HasConfigurationCondition="False" PersistedName="Private" />
+        </BoolProperty.DataSource>
+    </BoolProperty>
+
+    <StringProperty Name="Identity"
+                    Category="Misc"
+                    ReadOnly="True"
+                    DisplayName="Identity"
+                    Description="Security identity of the referenced assembly (see System.Reflection.Assembly.Evidence or System.Security.Policy.Evidence).">
+        <StringProperty.DataSource>
+            <DataSource PersistedName="{}{Identity}" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+     <!--These are metadata added to the resolved item by MSBuild that we don't show to the user but use internally.--> 
+    <StringProperty Name="OriginalItemSpec" Visible="False" ReadOnly="True" Description="The evaluated item name of the original reference item whose resolution resulted in this resolved reference item." />
+    <StringProperty Name="Name" Visible="false" ReadOnly="True" />
+</Rule>

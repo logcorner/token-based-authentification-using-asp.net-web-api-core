@@ -1,0 +1,39 @@
+<!--
+***********************************************************************************************
+Microsoft.TypeScript.DNX.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your web deploy projects from the command-line or the IDE.
+
+This file defines the changes to the standard TypeScript build process for TypeScript files in DNX projects.
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+-->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <TypeScriptBuildConfigurations Condition="Exists('$(MSBuildProjectDirectory)\scripts\tsconfig.json') AND !Exists('$(MSBuildProjectDirectory)\tsconfig.json')">$(TypeScriptBuildConfigurations) --project &quot;$(MSBuildProjectDirectory)\scripts&quot;</TypeScriptBuildConfigurations>
+    <TypeScriptBuildConfigurations Condition="Exists('$(MSBuildProjectDirectory)\tsconfig.json')">$(TypeScriptBuildConfigurations) --project &quot;$(MSBuildProjectDirectory)&quot;</TypeScriptBuildConfigurations>
+  </PropertyGroup>
+
+  <Target Name="CompileTypeScript" DependsOnTargets="$(CompileTypeScriptDependsOn)" Outputs="@(GeneratedJavascript)">
+    <Warning Text="Only a single tsconfig.json file is supported in either the root or the scripts folders, the file in the scripts folder is ignored." File="$(MSBuildProjectDirectory)\scripts\tsconfig.json" Condition="Exists('$(MSBuildProjectDirectory)\scripts\tsconfig.json') AND Exists('$(MSBuildProjectDirectory)\tsconfig.json')" />  
+    <VsTsc
+      ToolPath="$(TscToolPath)"
+      ToolExe="$(TscToolExe)"
+      Configurations="$(TypeScriptBuildConfigurations)"
+      FullPathsToFiles="@(TypeScriptCompile)"
+      YieldDuringToolExecution="$(TscYieldDuringToolExecution)"
+      OutFile="$(TypeScriptOutFile)"
+      OutDir="$(TypeScriptOutDir)"
+      ProjectDir="$(ProjectDir)"
+      ToolsVersion="$(TypeScriptToolsVersion)"
+      RootDir="$(TypeScriptRootDir)"
+      TypeScriptCompileBlocked="$(TypeScriptCompileBlocked)"
+      >
+      <Output TaskParameter="GeneratedJavascript" ItemName="GeneratedJavascript" />
+    </VsTsc>
+  </Target>
+</Project>

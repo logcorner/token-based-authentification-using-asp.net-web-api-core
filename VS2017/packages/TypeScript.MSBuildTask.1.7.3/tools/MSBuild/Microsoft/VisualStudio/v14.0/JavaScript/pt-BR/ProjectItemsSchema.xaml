@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <ContentType Name="Default" DisplayName="Tipo de arquivo padrão" ItemType="Content"/>
+
+  <ContentType Name="Resource" DisplayName="Arquivo de recurso" ItemType="PRIResource"/>
+
+  <ContentType Name="AppxManifest" DisplayName="Manifesto do Aplicativo" ItemType="AppxManifest"/>
+
+  <ItemType Name="None" DisplayName="Nenhum"/>
+  <ItemType Name="Content" DisplayName="Conteúdo"/>
+  <ItemType Name="AppxManifest" DisplayName="Manifesto do Aplicativo"/>
+  <ItemType Name="PRIResource" DisplayName="Recurso"/>
+
+  <FileExtension Name=".appxmanifest" ContentType="AppxManifest"/>
+  <FileExtension Name=".resjson" ContentType="Resource"/>
+</ProjectSchemaDefinitions>

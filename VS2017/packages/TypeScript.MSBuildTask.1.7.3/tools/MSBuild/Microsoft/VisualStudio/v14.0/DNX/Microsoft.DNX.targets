@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="DesignTimeHostBuild" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.DNX.Tasks.dll"/>  
+  <UsingTask TaskName="GetRuntimeToolingPath" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.DNX.Tasks.dll"/>  
+  <UsingTask TaskName="Dnx" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.DNX.Tasks.dll"/>  
+  <UsingTask TaskName="GetRuntimeVersion" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.DNX.Tasks.dll"/>  
+  <UsingTask TaskName="DefaultExternalToolsPath" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.DNX.Tasks.dll"/>  
+  <UsingTask TaskName="GetBuildOptions" AssemblyFile="$(MSBuildThisFileDirectory)Microsoft.DNX.Tasks.dll"/>  
+
+  <PropertyGroup>
+    <!-- Disable common capabilities that come from Microsoft.Common.Targets. Must be done prior to the Import -->
+    <DefineCommonCapabilities>false</DefineCommonCapabilities>
+
+    <!-- The project file should have paths set for these, but if not we default to the standard paths under the project -->
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
+
+    <!-- DNX only produces assemblies -->
+    <OutputType>Library</OutputType>
+
+    <!-- The output assembly is the name of the directory the project is in -->
+    <AssemblyName>$([System.IO.Path]::GetFileName('$(MSBuildProjectDirectory)'))</AssemblyName>
+
+  </PropertyGroup>
+  
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.Targets" />
+  
+  <!-- Capabilities for this project.  Conditions should be based on platform|configuration only. -->
+  <ItemGroup>
+    <!--<ProjectCapability Include="AssemblyReferences;COMReferences;ProjectReferences;WinRTReferences;SDKReferences" />-->
+    <ProjectCapability Include="AllTargetOutputGroups;VisualStudioWellKnownOutputGroups" />
+    <ProjectCapability Include="ProjectJsonConfigurations" />
+    <ProjectCapability Include="DNX" />
+    <ProjectCapability Include="ReferencesFolder"/>
+    <ProjectCapability Include="RelativePathDerivedDefaultNamespace"/>
+    <ProjectCapability Include="CSharp"/>
+    <ProjectCapability Include="TypeScript"/>
+    <ProjectCapability Include="DependencyPackageManagement" />
+    <ProjectCapability Include="SingleFileGenerators" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PropertyPageSchema Include="
+                                                $(MSBuildThisFileDirectory)$(LangName)\general.xaml;
+                                                ">
+      <Context>Project</Context>
+    </PropertyPageSchema>
+    <PropertyPageSchema Include="
+                                                $(MSBuildThisFileDirectory)$(LangName)\ProjectItemsSchema.xaml;
+                                                "/>
+    <PropertyPageSchema Include="
+                                                $(MSBuildThisFileDirectory)$(LangName)\debugger_general.xaml;
+                        ">
+      <Context>Project</Context>
+    </PropertyPageSchema>
+    
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangName)\ProjectDebugger.xaml">
+      <Context>Project</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangName)\general_file.xaml">
+      <Context>File</Context>
+    </PropertyPageSchema>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangName)\scc.xaml">
+      <Context>Invisible</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="
+                        $(MSBuildThisFileDirectory)$(LangName)\Content.xaml;
+                        $(MSBuildThisFileDirectory)$(LangName)\folder.xaml;
+                        $(MSBuildThisFileDirectory)$(LangName)\none.xaml;
+                        $(MSBuildThisFileDirectory)$(LangName)\EmbeddedResource.xaml;
+                        $(MSBuildThisFileDirectory)$(LangName)\typescript.xaml;
+      ">
+      <Context>File;BrowseObject</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="
+                        $(MSBuildThisFileDirectory)$(LangName)\ResolvedDesignTimeHostReferences.xaml;
+                        ">
+      <Context>ProjectSubscriptionService;BrowseObject</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangName)\general.browseobject.xaml">
+      <Context>BrowseObject</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DefaultContentType Condition="$(DefaultContentType) == ''">Default</DefaultContentType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangName)\csharp.xaml;">
+      <Context>File</Context>
+    </PropertyPageSchema>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangName)\csharp.browseobject.xaml;">
+      <Context>BrowseObject</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <!-- The local debugger command was set to an (empty) TargetPath before.  Now if this property is still empty,
+       set it again now that TargetPath is defined. -->
+  <PropertyGroup>
+    <!--<LocalDebuggerCommand Condition="'$(LocalDebuggerCommand)' == ''">$(TargetPath)</LocalDebuggerCommand>-->
+    <!-- We need to set this property otherwise it will try to copy our outputs, which we don't have-->
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+
+    <!-- Avoid picking up explicit references like system.core.dll. Setting the first property is not sufficient as the common targets
+         unconditionally adds the contents of AddtionalExplicitAssemblyReferences - so that property is cleared too -->
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <AdditionalExplicitAssemblyReferences></AdditionalExplicitAssemblyReferences>
+    <ProduceOutputsOnBuild Condition="'$(ProduceOutputsOnBuild)' == ''">False</ProduceOutputsOnBuild>
+  </PropertyGroup>
+  
+  <Target Name="GetRuntimeToolingPathTarget" >
+    <GetRuntimeToolingPath ProjectFolder="$(MSBuildProjectDirectory)" DesiredRuntimeDirectory ="$(RuntimeToolingDirectory)">
+      <!-- Path to the versioned runtime folder -->
+      <Output PropertyName="RuntimeToolingDirectory" TaskParameter="RuntimeToolingDirectory"></Output>
+      <!-- The full path to the runtime executable -->
+      <Output PropertyName="RuntimeToolingExe" TaskParameter="RuntimeToolingExe"></Output>
+      <!-- The runtime package version string -->
+      <Output PropertyName="RuntimeToolingVersion" TaskParameter="RuntimeToolingVersion"></Output>
+    </GetRuntimeToolingPath>
+    <Error Text="The Dnx Runtime package needs to be installed. See output window for more details." Condition="!Exists('$(RuntimeToolingExe)')" />
+  </Target>
+
+  <!-- Without these targets, builds which include Microsoft.Common.Targets fail -->
+  <Target Name="CreateManifestResourceNames" />
+
+  <Target
+    Name="CoreCompile"
+    DependsOnTargets="GetRuntimeToolingPathTarget">
+
+  <PropertyGroup>
+    <OutDirNoSlash>$(OutDir.TrimEnd('\'))</OutDirNoSlash>
+    <_DesignTimeHostBuild Condition="'$(UseDesignTimeHostBuild)' == 'true' And '$(ProduceOutputsOnBuild)' != 'true'">true</_DesignTimeHostBuild>
+  </PropertyGroup>
+
+
+    <!-- Use either the external design time host process or run KLR to do the build and produce outputs. Note that it is
+         important that the working directory is set to the project folder. This ensures any relative paths are relative to the 
+         project.
+    -->
+
+    <GetBuildOptions  
+        Configuration="$(Configuration)"
+        ProjectDirectory ="$(MSBuildProjectDirectory)"
+        OutDirectory ="$(OutDirNoSlash)" 
+        RuntimeToolingDirectory ="$(RuntimeToolingDirectory)"
+        Condition="'$(_DesignTimeHostBuild)' != 'true'"
+    >
+      <Output PropertyName="_BuildModule" TaskParameter="BuildModule"></Output>
+      <Output PropertyName="_BuildArguments" TaskParameter="BuildArguments"></Output>
+    </GetBuildOptions>
+
+    <Dnx
+      RuntimeExe="$(RuntimeToolingExe)"
+      Condition="'$(_DesignTimeHostBuild)' != 'true'"
+      AppBase="$(MSBuildProjectDirectory)"
+      Module="$(_BuildModule)"
+      ModuleArguments="$(_BuildArguments)"
+      />
+    
+    <DesignTimeHostBuild
+      Condition="'$(_DesignTimeHostBuild)' == 'true'"
+      Port="$(DTHPort)"
+      HostID="$(DTHHostID)"
+      ContextID="$(DTHContextID)"
+      DTHProtocolVersion="$(DTHProtocolVersion)"
+      Rebuild ="$(RebuildInvoked)"
+    />
+  </Target>
+
+  <!-- This is used to set a property which indicates that the rebuild target was invoked -->
+  <PropertyGroup>
+    <RebuildDependsOn>
+      _BeforeRebuild;
+      $(RebuildDependsOn);
+    </RebuildDependsOn>
+  </PropertyGroup>
+
+  <Target
+      Name="_BeforeRebuild"
+      Returns="$(TargetPath)">
+      
+      <PropertyGroup>
+        <RebuildInvoked>true</RebuildInvoked>
+      </PropertyGroup>
+
+  </Target>
+
+  <!-- Debugger support -->
+  <PropertyGroup>
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
+
+  <!-- Publish support -->
+  <PropertyGroup>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(WebPublishTargetsVersion)</VSToolsPath>
+    <_WebPublishTargetsPath Condition=" '$(_WebPublishTargetsPath)'=='' ">$(VSToolsPath)</_WebPublishTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(_WebPublishTargetsPath)\Web\Microsoft.DNX.Publishing.targets" />
+
+   <!-- Typescript support 
+        Note that the typcscript targets have a dependency on the $(_WebPublishTargetsPath) property and this property should not be changed.
+   -->
+  <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets')"/>
+
+  <!-- Dynamic items support. This file will never exist on disk -->
+  <Import Project="$(MSBuildProjectDirectory)\_internalAspNetSourceItems.Targets" Condition="'$(_InternalTargetsFileReady)' == 'true' and Exists('$(MSBuildProjectDirectory)\_internalAspNetSourceItems.Targets')"/>
+
+</Project>

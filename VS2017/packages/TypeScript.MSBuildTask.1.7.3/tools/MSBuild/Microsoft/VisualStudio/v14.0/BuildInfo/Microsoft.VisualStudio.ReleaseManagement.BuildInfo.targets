@@ -1,0 +1,265 @@
+﻿<!--
+***********************************************************************************************
+Microsoft.BuildInfo.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+This file contains targets to produce a build info file.
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+  <UsingTask TaskName="GenerateBuildInfoTask" AssemblyFile="Microsoft.VisualStudio.ReleaseManagement.BuildInfoTasks.dll"></UsingTask>
+  <UsingTask TaskName="AddUnmanagedResource" AssemblyFile="Microsoft.VisualStudio.ReleaseManagement.BuildInfoTasks.dll"></UsingTask>
+  <UsingTask TaskName="ExtractUnmanagedResource" AssemblyFile="Microsoft.VisualStudio.ReleaseManagement.BuildInfoTasks.dll"></UsingTask>
+  
+  
+  <!-- ################################################################################ -->
+  <!-- Defaults -->
+  <!-- ################################################################################ -->
+  <PropertyGroup>
+    <!-- Are we building inside TeamBuild? -->
+    <BuildingInTeamBuild Condition=" '$(BuildUri)'!='' ">true</BuildingInTeamBuild>
+
+    <!-- Generate build info config file for team build by default. Uncomment the line below after testing-->
+    <GenerateBuildInfoConfigFile Condition=" '$(BuildingInTeamBuild)'=='true' AND $(GenerateBuildInfoConfigFile)=='' ">true</GenerateBuildInfoConfigFile>
+    <GenerateBuildInfoConfigFile Condition=" $(GenerateBuildInfoConfigFile)=='' ">false</GenerateBuildInfoConfigFile>
+
+    <AddBuildInfoToAssembly Condition=" $(AddBuildInfoToAssembly) == ''">false</AddBuildInfoToAssembly>
+    <IncludeServerNameInBuildInfo Condition=" $(IncludeServerNameInBuildInfo) == '' ">false</IncludeServerNameInBuildInfo>
+  </PropertyGroup>
+
+  <!-- ################################################################################ -->
+  <!-- Targets -->
+  <!-- ################################################################################ -->
+
+  <!-- ******************************************************* -->
+  <!-- Target to supply default values for the BuildInfo file
+       if the caller hasn't already supplied them. -->
+  <!-- ******************************************************* -->
+  <Target Name="SetBuildInfoDefaults" >
+
+    <!-- ******************************************************* -->
+    <!-- Assign the default values to BuildInfo properties. -->
+    <!-- ******************************************************* -->
+    <PropertyGroup>
+      <BuildId Condition=" $(BuildId)=='' AND $(BuildUri)!='' ">$(BuildUri)</BuildId>
+      <BuildId Condition=" $(BuildId)=='' ">AutoGen_$([System.Guid]::NewGuid())</BuildId>
+      <BuildLabel Condition=" $(BuildLabel)=='' ">$(BuildId)</BuildLabel>
+      <BuildTimestamp Condition=" $(BuildTimestamp)=='' ">$([System.DateTime]::UtcNow.ToString("R"))</BuildTimestamp>
+    </PropertyGroup>
+
+    <!-- ******************************************************* -->
+    <!-- Set the build info output file name if it hasn't already been set -->
+    <!-- ******************************************************* -->
+    <PropertyGroup>
+      <!-- Default the path the target directory, failing which the project directory -->
+      <BuildInfoPath Condition=" $(BuildInfoPath)=='' ">$(TargetDir)</BuildInfoPath>
+      <BuildInfoPath Condition=" $(BuildInfoPath)=='' ">$(MSBuildProjectDirectory)</BuildInfoPath>
+
+      <!-- Output file name: default to "[$AssemblyName].BuildInfo.config" -->
+      <BuildInfoFileName Condition=" $(BuildInfoFileName) == '' AND  $(AssemblyName)!='' ">$(AssemblyName).BuildInfo.config</BuildInfoFileName>
+      <BuildInfoFileName Condition=" $(BuildInfoFileName) == '' ">BuildInfo.config</BuildInfoFileName>
+      
+      <!-- Set the full path and file name. We don't need a Condition here since it's checked in the containing PropertyGroup -->
+      <BuildInfoResourceFileName> $([System.IO.Path]::Combine($(IntermediateOutputPath), $(BuildInfoFileName)))</BuildInfoResourceFileName>
+      <BuildInfoConfigFileName> $([System.IO.Path]::Combine($(BuildInfoPath), $(BuildInfoFileName)))</BuildInfoConfigFileName>
+      <BuildInfoResourceLogicalName Condition= " $(BuildInfoResourceLogicalName)=='' ">Microsoft.VisualStudio.BuildInfo.Config</BuildInfoResourceLogicalName>
+    </PropertyGroup>
+  </Target>
+
+
+  <!-- **********************************************************************************-->
+  <!-- Target to create a new BuildInfo file as an embedded resource in the compiled file-->
+  <!-- ********************************************************************************* -->
+  <Target Name="CreateTfsBuildInfoResource"
+    Condition=" $(AddBuildInfoToAssembly)==true "
+    AfterTargets="AfterCompile"
+    BeforeTargets="AfterBuild"
+    Inputs="$(MSBuildAllProjects);
+            @(Compile);
+            @(_CoreCompileResourceInputs);
+            $(ApplicationIcon);
+            $(AssemblyOriginatorKeyFile);
+            @(ReferencePath);
+            @(CompiledLicenseFile);
+            @(LinkResource);
+            @(EmbeddedDocumentation);
+            $(Win32Resource);
+            $(Win32Manifest);
+            @(Page);
+            @(ApplicationDefinition);
+            @(CustomAdditionalCompileInputs)"
+    Outputs="$(BuildInfoResourceFileName)"
+    DependsOnTargets="SetBuildInfoDefaults">
+
+    <GenerateBuildInfoTask
+      BuildId="$(BuildId)"
+      BuildLabel="$(BuildLabel)"
+      BuildTimestamp="$(BuildTimestamp)"
+      OutputFileName="$(BuildInfoResourceFileName)"
+      TargetFileInSourceControl="$(MSBuildProjectFullPath)"
+      TfsBuildUri="$(BuildUri)"
+      TfsUrl="$(TeamFoundationServerUrl)"
+      Configuration ="$(Configuration)"
+      BuiltSolution="$(SolutionPath)"
+      BuildDefinition="$(BuildDefinition)"
+      SymbolPath="$(BuildSymbolStorePath)"
+      SourceVersion="$(BuildSourceVersion)"
+      IncludeServerNameInBuildInfo="$(IncludeServerNameInBuildInfo)"
+      />
+
+    <!-- Add the file to @(FileWrites) so it will be cleaned up by the Clean target -->
+    <ItemGroup Condition=" Exists('$(BuildInfoResourceFileName)') ">
+      <FileWrites Include="$(BuildInfoResourceFileName)" />
+    </ItemGroup>
+
+    <AddUnmanagedResource
+      AssemblyFile="@(IntermediateAssembly)"
+      ResourceFile="$(BuildInfoResourceFileName)"
+      ResourceName="$(BuildInfoResourceLogicalName)"
+      />
+
+  </Target>
+
+  <!-- ******************************************************* -->
+  <!-- Target to create a new BuildInfo file -->
+  <!-- ******************************************************* -->
+  <Target Name="CreateTfsBuildInfoFile"
+    Condition=" $(GenerateBuildInfoConfigFile)==true AND $(WebProjectOutputDir)!=''"
+    AfterTargets="AfterCompile"
+    Inputs="@(IntermediateAssembly);
+            @(Content);
+            @(None);
+            @(DocFileItem);
+            @(_SourceItemsToCopyToOutputDirectoryAlways);
+            @(_SourceItemsToCopyToOutputDirectory);
+            @(_WebApplicationSilverlightXapFiles);
+            @(_binDeployableAssemblies)"
+    Outputs="$(BuildInfoConfigFileName)"
+    DependsOnTargets="SetBuildInfoDefaults">
+
+    <GenerateBuildInfoTask
+      BuildId="$(BuildId)"
+      BuildLabel="$(BuildLabel)"
+      BuildTimestamp="$(BuildTimestamp)"
+      OutputFileName="$(BuildInfoConfigFileName)"
+      TargetFileInSourceControl="$(MSBuildProjectFullPath)"
+      ProjectName="$(MSBuildProjectName)"
+      TfsBuildUri="$(BuildUri)"
+      TfsUrl="$(TeamFoundationServerUrl)"
+      Platform="$(Platform)"
+      Configuration ="$(Configuration)"
+      BuiltSolution="$(SolutionPath)"
+      BuildDefinition="$(BuildDefinition)"
+      SymbolPath="$(BuildSymbolStorePath)"
+      SourceVersion="$(BuildSourceVersion)"
+      IncludeServerNameInBuildInfo="$(IncludeServerNameInBuildInfo)"
+        />
+
+      <!-- Add the file to @(FileWrites) so it will be cleaned up by the Clean target -->
+      <ItemGroup Condition=" Exists('$(BuildInfoConfigFileName)') ">
+        <FileWrites Include="$(BuildInfoConfigFileName)" />
+      </ItemGroup>
+    
+      
+
+    <!-- We're assuming we're only copying one file, so the DestinationFolder
+         is hard-coded to a single file name. -->
+    <Copy
+          Condition="$(Disable_CopyWebApplication) != '' AND $(Disable_CopyWebApplication)== 'false' AND '$(OutDir)' != '$(OutputPath)' AND Exists('$(BuildInfoConfigFileName)') "
+          SourceFiles="$(BuildInfoConfigFileName)"
+          DestinationFiles="$(WebProjectOutputDir)\BuildInfo.config" 
+          SkipUnchangedFiles="true" 
+          Retries="$(CopyRetryCount)"
+          RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+
+    <!-- Add the file to @(FileWrites) so it will be cleaned up by the Clean target -->
+    <ItemGroup Condition="$(Disable_CopyWebApplication) != '' AND $(Disable_CopyWebApplication)== 'false' AND '$(OutDir)' != '$(OutputPath)' AND Exists('$(BuildInfoConfigFileName)') ">
+      <FileWrites Include="$(WebProjectOutputDir)\BuildInfo.config" />
+    </ItemGroup>
+
+  </Target>
+
+    <PropertyGroup>
+        <PublishPipelineCollectFilesCore>
+            $(PublishPipelineCollectFilesCore);
+            CollectFilesFromBuildInfoConfigFile;
+        </PublishPipelineCollectFilesCore>
+    </PropertyGroup>
+
+    <Target Name="CollectFilesFromBuildInfoConfigFile"
+            DependsOnTargets="CreateTfsBuildInfoFile"
+            Condition=" $(GenerateBuildInfoConfigFile)==true AND $(WebProjectOutputDir)!=''">
+        <!-- Add the file with the necessary metadata to the set of files to be
+           published by WebDeploy.
+         
+           Web publishing is controlled by Microsoft.Web.Publishing.targets in 
+           %(MSBuildExtensions)\Microsoft\VisualStudio\v%(VisualStudioVersion)%\Web. These targets have a
+           customisable mechanism for deciding which files should be published -
+           search for "FilesToIncludeTargetFile" for more information. We're short-circuiting
+           the normal mechanism by explicitly adding the file to the list that needs
+           to be published.
+           -->
+        <ItemGroup Condition=" Exists('$(BuildInfoConfigFileName)') " >
+            <FilesForPackagingFromProject Include="$(BuildInfoConfigFileName)" >
+                <!-- The file should appear at the destination root (which is where the
+                web.config should be) and be called BuildInfo.config. -->
+                <DestinationRelativePath>BuildInfo.config</DestinationRelativePath>
+                <FromTarget>CollectFilesFromBuildInfoConfigFile</FromTarget>
+                <Exclude>false</Exclude>
+                <Category>Run</Category>
+            </FilesForPackagingFromProject>
+        </ItemGroup>
+    </Target>
+
+  <!-- ******************************************************* -->
+  <!-- Target to delete an existing BuildInfo file -->
+  <!-- ******************************************************* -->
+  <Target Name="DeleteBuildInfoFile"
+      AfterTargets="AfterCompile"
+      Condition=" $(GenerateBuildInfoConfigFile)==false "
+      DependsOnTargets="SetBuildInfoDefaults">
+    <Delete Condition="EXISTS('$(BuildInfoConfigFileName)')" Files="$(BuildInfoConfigFileName)" />
+  </Target>
+
+  <Target Name="DeleteBuildInfoResource"
+      AfterTargets="AfterCompile"
+      Condition=" $(AddBuildInfoToAssembly)==false "
+      DependsOnTargets="SetBuildInfoDefaults">
+
+    <Delete Condition="EXISTS('$(BuildInfoResourceFileName)')" Files="$(BuildInfoResourceFileName)" />
+  </Target>
+
+  <Target Name="ExtractUnmanagedResource">
+    <PropertyGroup>
+      <AssemblyFile Condition=" $(AssemblyFile)=='' ">$(TargetPath)</AssemblyFile>
+    </PropertyGroup>
+    <ExtractUnmanagedResource
+      AssemblyFile="$(AssemblyFile)"
+      ResourceName="$(ResourceName)"
+      ResourceType="$(ResourceType)"
+      ResourceFile="$(ResourceFile)"
+      CanLogErrors="$(CanLogErrors)"
+      />
+  </Target>
+
+  <Target Name="AddUnmanagedResource">
+    <PropertyGroup>
+      <AssemblyFile Condition=" $(AssemblyFile)=='' ">$(TargetPath)</AssemblyFile>
+    </PropertyGroup>
+    <AddUnmanagedResource
+      AssemblyFile="$(AssemblyFile)"
+      ResourceFile="$(ResourceFile)"
+      ResourceName="$(ResourceName)"
+      ResourceType="$(ResourceType)"
+      CanLogErrors="$(CanLogErrors)"
+      />
+  </Target>
+
+</Project>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+    
+<!-- Rule definition for project state in property sheet -->
+<Rule
+	Name="ConfigurationGeneral"
+	DisplayName="Project Properties"
+	PageTemplate="generic"
+	Description="Project Properties"
+	xmlns="http://schemas.microsoft.com/build/2009/properties">
+	<Rule.Categories>
+        <Category Name="Misc" DisplayName="Misc" Description="Misc" />
+	</Rule.Categories>
+	<Rule.DataSource>
+        <DataSource Persistence="ProjectFile" Label="Configuration" HasConfigurationCondition="false" />
+	</Rule.DataSource>
+
+    <StringProperty Name="ProjectFile" ReadOnly="True" Category="Misc" DisplayName="Project File" Description="The name of the project file.">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" PersistedName="MSBuildProjectFile" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+    <StringProperty Name="ProjectFolder" ReadOnly="True" Category="Misc" DisplayName="Project Folder" Description="The location of the project file.">
+		<StringProperty.DataSource>
+			<DataSource Persistence="ProjectFile" PersistedName="MSBuildProjectDirectory" />
+		</StringProperty.DataSource>
+	</StringProperty>
+
+    <StringProperty Name="FullPath" ReadOnly="true" Visible="false">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" PersistedName="MSBuildProjectFullPath" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+    <StringProperty Name="TargetFrameworkMoniker" Visible="false">
+        <StringProperty.DataSource>
+            <DataSource Persistence="ProjectFile" PersistedName="TargetFrameworkMoniker" />
+        </StringProperty.DataSource>
+    </StringProperty>
+
+</Rule>

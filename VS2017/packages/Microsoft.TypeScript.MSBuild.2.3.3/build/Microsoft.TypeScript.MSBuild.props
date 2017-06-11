@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\tools\Microsoft.TypeScript.Default.props" />
+  <PropertyGroup>
+    <TypeScriptNuGetToolsVersion>2.3</TypeScriptNuGetToolsVersion>
+    <EnableTypeScriptNuGetTarget>true</EnableTypeScriptNuGetTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Copied these properties from Microsoft.typescript.targets to workaround the bug in Azure publishing -->
+    <PublishPipelineCollectFilesCore>
+      $(PublishPipelineCollectFilesCore);
+      FindConfigFiles;
+      CompileTypeScript;
+      CompileTypeScriptWithTSConfig;
+    </PublishPipelineCollectFilesCore>
+  </PropertyGroup>
+</Project>

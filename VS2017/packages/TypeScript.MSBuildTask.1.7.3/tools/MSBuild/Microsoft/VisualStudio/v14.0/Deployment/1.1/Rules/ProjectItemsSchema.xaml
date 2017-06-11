@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<ProjectSchemaDefinitions
+    xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+    <ContentType Name="Default" DisplayName="Default file type" ItemType="None" />
+
+    <!-- Types of project items supported by the project -->
+    <ItemType Name="Content" DisplayName="Content" />
+    <ItemType Name="None" DisplayName="None"/>
+
+    <!-- File extensions supported by the project -->
+    <FileExtension Name=".ps1" ContentType="None"/>
+    <FileExtension Name=".psm1" ContentType="None"/>
+    <FileExtension Name=".psd1" ContentType="None"/>
+    <FileExtension Name=".json" ContentType="Content"/>
+
+</ProjectSchemaDefinitions>
+

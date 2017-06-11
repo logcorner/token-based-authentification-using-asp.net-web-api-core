@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Condition="'$(SDKIdentifier)' == '' and '$(TargetPlatformIdentifier)' == 'UAP'">
+    <SDKIdentifier>Windows</SDKIdentifier>
+    <SDKVersion>10.0</SDKVersion>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)\Microsoft.VisualStudio.JavaScript.Common.targets" />
+
+  <Import Condition=" '$(TargetPlatformIdentifier)' == 'WindowsPhoneApp' " Project="$(MSBuildThisFileDirectory)\Microsoft.VisualStudio.JavaScript.WindowsPhone.targets" />
+
+  <Import Condition=" '$(TargetPlatformIdentifier)' == 'Windows' " Project="$(MSBuildThisFileDirectory)\Microsoft.VisualStudio.JavaScript.Windows.targets" />
+
+  <Import Condition=" '$(TargetPlatformIdentifier)' == 'UAP' " Project="$(MSBuildThisFileDirectory)\Microsoft.VisualStudio.JavaScript.UAP.targets" />
+
+</Project>

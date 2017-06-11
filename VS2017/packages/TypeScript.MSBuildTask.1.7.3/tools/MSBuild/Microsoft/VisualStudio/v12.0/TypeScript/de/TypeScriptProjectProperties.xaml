@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule Name="TypeScriptBuild" DisplayName="TypeScript-Build" PageTemplate="generic" Description="TypeScript-Build" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="TypeScriptBuild" DisplayName="TypeScript-Build"/>
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration"/>
+  </Rule.DataSource>
+
+  <EnumProperty Name="TypeScriptTarget" DisplayName="ECMAScript-Version" Category="TypeScriptBuild" Description="Für das generierte JavaScript zu verwendende ECMAScript-Version">
+    <EnumValue Name="ES3" DisplayName="ECMAScript 3"/>
+    <EnumValue Name="ES5" DisplayName="ECMAScript 5"/>
+    <EnumValue Name="ES6" DisplayName="ECMAScript 6"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptCompileOnSaveEnabled" DisplayName="Beim Speichern kompilieren" Category="TypeScriptBuild" Description="Quellen beim Speichern neu kompilieren">
+    <EnumValue Name="true" DisplayName="Ja"/>
+    <EnumValue Name="false" DisplayName="Nein"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptNoImplicitAny" DisplayName="Implizite 'any'-Typen zulassen" Category="TypeScriptBuild" Description="Warnungen für Ausdrücke und Deklarationen mit impliziertem Any-Typ unterdrücken">
+    <EnumValue Name="false" DisplayName="Ja"/>
+    <EnumValue Name="true" DisplayName="Nein"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptModuleKind" DisplayName="Modulsystem" Category="TypeScriptBuild" Description="Externes Ziel für Modulcodegenerierung">
+    <EnumValue Name="none" DisplayName="Keine"/>
+    <EnumValue Name="amd" DisplayName="AMD"/>
+    <EnumValue Name="commonjs" DisplayName="CommonJS"/>
+    <EnumValue Name="umd" DisplayName="UMD"/>
+    <EnumValue Name="system" DisplayName="System"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptRemoveComments" DisplayName="Kommentare in JavaScript-Ausgabe beibehalten" Category="TypeScriptBuild" Description="Kommentare in Ausgabe ausgeben">
+    <EnumValue Name="false" DisplayName="Ja"/>
+    <EnumValue Name="true" DisplayName="Nein"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptOutFile" DisplayName="JavaScript-Ausgabe in Datei kombinieren" Category="TypeScriptBuild" Description="Ausgabe in eine Datei umleiten"/>
+
+  <StringProperty Name="TypeScriptOutDir" DisplayName="JavaScript-Ausgabe in Verzeichnis umleiten" Category="TypeScriptBuild" Description="Ausgabe in ein anderes Verzeichnis als die Quellen umleiten"/>
+
+  <EnumProperty Name="TypeScriptGeneratesDeclarations" DisplayName="Deklarationsdateien generieren" Category="TypeScriptBuild" Description="Entsprechende d.ts-Datei generieren">
+    <EnumValue Name="true" DisplayName="Ja"/>
+    <EnumValue Name="false" DisplayName="Nein"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptSourceMap" DisplayName="Quellzuordnungen generieren" Category="TypeScriptBuild" Description="Generiert die entsprechende .map-Datei">
+    <EnumValue Name="true" DisplayName="Ja"/>
+    <EnumValue Name="false" DisplayName="Nein"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptMapRoot" DisplayName="Stammverzeichnis von Quellzuordnungen angeben" Category="TypeScriptBuild" Description="Gibt die Quellzuordnungen so aus, dass sich Quellzuordnungen beim Debuggen im Stamm der Quellzuordnung befinden"/>
+
+  <StringProperty Name="TypeScriptSourceRoot" DisplayName="Stammverzeichnis von TypeScript-Dateien angeben" Category="TypeScriptBuild" Description="Gibt die Quellzuordnungen so aus, dass sich Quellen beim Debuggen im Quellstamm befinden"/>
+
+  <EnumProperty Name="TypeScriptNoEmitOnError" DisplayName="Ausgabe bei Fehler" Category="TypeScriptBuild" Description="Ausgaben ausgeben, wenn Fehler gemeldet wurden.">
+    <EnumValue Name="true" DisplayName="Nein"/>
+    <EnumValue Name="false" DisplayName="Ja"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptJSXEmit" DisplayName="Kompilierungsmodus für TSX-Dateien" Category="TypeScriptBuild" Description="Geben Sie den JSX-Codekompilierungsmodus für TSX-Dateien an. Dies wirkt sich nicht auf TS-Dateien aus.">
+    <EnumValue Name="none" DisplayName="Keine"/>
+    <EnumValue Name="preserve" DisplayName="JSX-Elemente beibehalten"/>
+    <EnumValue Name="react" DisplayName="React-Aufruf für JSX-Elemente ausgeben"/>
+  </EnumProperty>
+</Rule>

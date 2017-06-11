@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="AddImportToServiceDefinition"                AssemblyFile="$(CloudExtensionsTaskPath)" />
+  <UsingTask TaskName="AddCertificateToServiceConfiguration"        AssemblyFile="$(CloudExtensionsTaskPath)" />
+  <UsingTask TaskName="AddInstanceinputEndpointToServiceDefinition" AssemblyFile="$(CloudExtensionsTaskPath)" />
+  
+  <PropertyGroup>
+    <EnableRemoteDebugger Condition="'$(EnableRemoteDebugger)' == ''">false</EnableRemoteDebugger>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ValidateRoleFilesDependsOn>
+      $(ValidateRoleFilesDependsOn);
+      ValidateRemoteDebugger;
+      </ValidateRoleFilesDependsOn>
+  </PropertyGroup>
+  
+  <Target Name="ValidateRemoteDebugger" Condition="'$(EnableRemoteDebugger)' == 'true'" >
+    <!-- Get the 'osFamily' from the service configuration fle-->
+    <XPathQuery
+        Condition=" '@(TargetServiceConfiguration)' != '' "
+        Namespaces="@(XmlNamespaces)"
+        XPath="csc:ServiceConfiguration/@osFamily"
+        XmlFile="@(TargetServiceConfiguration)"
+        >
+      <Output TaskParameter="QueryResult" ItemName="TargetOSFamily" />
+    </XPathQuery>
+
+    <Error Condition="'%(TargetOSFamily.Identity)' == '1'" Text="Remote Debugger does not support OSFamily 1 (Windows Server 2008 SP2)" />
+  </Target>
+  
+  <PropertyGroup>
+    <BeforePackageComputeServiceDependsOn>
+      $(BeforePackageComputeServiceDependsOn);
+      ImportRemoteDebuggerPlugins;
+    </BeforePackageComputeServiceDependsOn>
+  </PropertyGroup>
+
+  <Target Name="BeforePackageComputeService" DependsOnTargets="$(BeforePackageComputeServiceDependsOn)" />
+
+  <Target Name="ImportRemoteDebuggerPlugins">
+    <ItemGroup>
+      <ImportedModules Condition="'$(EnableRemoteDebugger)'=='true'" Include="RemoteDebuggerConnector">
+        <SourcePath>$(RemoteDebuggerConnectorTargetDir)RemoteDebuggerConnector.csplugin</SourcePath>
+      </ImportedModules>
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup>
+    <AfterConfigurePluginsDependsOn>
+      $(AfterConfigurePluginsDependsOn);
+      ConfigureRemoteDebugger
+    </AfterConfigurePluginsDependsOn>
+  </PropertyGroup>
+
+  <Target Name="AfterConfigurePlugins"
+          DependsOnTargets="$(AfterConfigurePluginsDependsOn)"/>
+
+  <!-- 
+  ===============ConfigureRemoteDebugger=============================================
+
+    Includes Debugging files in the package.
+  
+    [IN]
+    
+  ==============================================================================
+  -->
+
+  <PropertyGroup>
+    <VSX64RemoteDebuggerPath Condition=" '$(VSX64RemoteDebuggerPath)' == '' ">$(VisualStudioIDEPath)Remote Debugger\x64\</VSX64RemoteDebuggerPath>
+    <RemoteDebuggerConnectorTargetDir>$(BaseIntermediateOutputPath)$(Configuration)\RemoteDebuggerConnector\</RemoteDebuggerConnectorTargetDir>
+    <RemoteDebuggerConnectorPath Condition=" '$(RemoteDebuggerConnectorPath)' == '' ">$(CloudToolsInstallPath)RemoteDebuggerConnector\</RemoteDebuggerConnectorPath>
+    <RemoteDebuggerConnectorCertificateThumbprint Condition=" '$(RemoteDebuggerConnectorCertificateThumbprint)' == '' "></RemoteDebuggerConnectorCertificateThumbprint>
+    <RemoteDebuggerConnectorVersion Condition=" '$(RemoteDebuggerConnectorVersion)' == '' ">unknown</RemoteDebuggerConnectorVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <VSX64RemoteDebuggerFiles Include="$(VSX64RemoteDebuggerPath)**\*.*" />
+    <RemoteDebuggerConnectorFiles Include="$(RemoteDebuggerConnectorPath)**\*.*" />
+  </ItemGroup>
+
+  <Target Name="ConfigureRemoteDebugger" Condition="'$(EnableRemoteDebugger)'=='true'">
+    <Message Text="Adding RemoteDebugger components..." />
+
+    <XPathQuery
+       Condition=" '@(TargetServiceConfiguration)' != '' "
+       Namespaces="@(XmlNamespaces)"
+       XPath="(csd:ServiceDefinition/csd:WebRole/@name | csd:ServiceDefinition/csd:WorkerRole/@name)"
+    XmlFile="@(TargetServiceDefinition)"
+        >
+      <Output TaskParameter="QueryResult" ItemName="RemoteDebuggerConnectorRoles" />
+    </XPathQuery>
+    
+    <!-- Copy the remote debugger files -->
+    <Copy
+      SourceFiles="@(VSX64RemoteDebuggerFiles)"
+      DestinationFolder="$(RemoteDebuggerConnectorTargetDir)x64\%(RecursiveDir)"
+      SkipUnchangedFiles="true"
+      OverwriteReadOnlyFiles="true" >
+      <Output TaskParameter="CopiedFiles" ItemName="FileWrites" />
+    </Copy>
+
+    <!-- Copy the remote connector file.  -->
+    <Copy
+      SourceFiles="@(RemoteDebuggerConnectorFiles)"
+      DestinationFolder="$(RemoteDebuggerConnectorTargetDir)%(RecursiveDir)"
+      SkipUnchangedFiles="true"
+      OverwriteReadOnlyFiles="true" >
+      <Output TaskParameter="CopiedFiles" ItemName="FileWrites" />
+    </Copy>
+
+    <!-- Apply the RemoteDebuggerConnector plugin to all Web and Worker Roles-->
+    <XPathQuery
+       Condition=" '@(TargetServiceDefinition)' != '' And '@(RemoteDebuggerConnectorRoles)' == ''"
+       Namespaces="@(XmlNamespaces)"
+       XPath="(csd:ServiceDefinition/csd:WebRole/@name | csd:ServiceDefinition/csd:WorkerRole/@name)"
+    XmlFile="@(TargetServiceDefinition)"
+        >
+      <Output TaskParameter="QueryResult" ItemName="RemoteDebuggerConnectorRoles" />
+    </XPathQuery>
+
+    <Message Text="RemoteDebuggerConnectorRoles is $(RemoteDebuggerConnectorRoles)" />
+
+    <AddImportToServiceDefinition
+       ServiceDefinitionFile="@(TargetServiceDefinition)"
+       Import="RemoteDebuggerConnector"
+       Roles="@(RemoteDebuggerConnectorRoles)"
+    />
+
+    <!-- Add RemoteDebuggerConnector related settings to service configuration file.  -->
+    <AddSettingToServiceConfiguration
+      ServiceConfigurationFile="@(TargetServiceConfiguration)"
+      Setting ="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Connector.Enabled"
+      Roles="@(RemoteDebuggerConnectorRoles)"
+      Value="true" />
+
+    <AddSettingToServiceConfiguration
+      ServiceConfigurationFile="@(TargetServiceConfiguration)"
+      Setting ="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Connector.Version"
+      Roles="@(RemoteDebuggerConnectorRoles)"
+      Value="$(RemoteDebuggerConnectorVersion)" />
+
+    <AddSettingToServiceConfiguration
+        ServiceConfigurationFile="@(TargetServiceConfiguration)"
+        Setting ="Microsoft.WindowsAzure.Plugins.RemoteDebugger.ClientThumbprint"
+        Roles="@(RemoteDebuggerConnectorRoles)"
+        Value="$(RemoteDebuggerConnectorCertificateThumbprint)" />
+
+    <!-- in the plugin case, the client and server certificates are identical, since we upload the certificate with the deployment. -->
+    <AddSettingToServiceConfiguration
+        ServiceConfigurationFile="@(TargetServiceConfiguration)"
+        Setting ="Microsoft.WindowsAzure.Plugins.RemoteDebugger.ServerThumbprint"
+        Roles="@(RemoteDebuggerConnectorRoles)"
+        Value="$(RemoteDebuggerConnectorCertificateThumbprint)" />
+
+    <AddCertificateToServiceConfiguration
+        ServiceConfigurationFile="@(TargetServiceConfiguration)"
+        Certificate ="Microsoft.WindowsAzure.Plugins.RemoteDebugger.TransportValidation"
+        Roles="@(RemoteDebuggerConnectorRoles)"
+        Thumbprint="$(RemoteDebuggerConnectorCertificateThumbprint)" />
+
+    <AddInstanceinputEndpointToServiceDefinition
+        ServiceDefinitionFile="@(TargetServiceDefinition)"
+        Roles="@(RemoteDebuggerConnectorRoles)"
+        EndpointName="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Connector"
+        LocalPort="30398"
+        PublicPortStartFrom="30400"
+        Protocol="tcp" />
+
+    <AddInstanceinputEndpointToServiceDefinition
+        ServiceDefinitionFile="@(TargetServiceDefinition)"
+        Roles="@(RemoteDebuggerConnectorRoles)"
+        EndpointName="Microsoft.WindowsAzure.Plugins.RemoteDebugger.Forwarder"
+        LocalPort="31398"
+        PublicPortStartFrom="31400"
+        Protocol="tcp" />
+
+    <AddInstanceinputEndpointToServiceDefinition
+        ServiceDefinitionFile="@(TargetServiceDefinition)"
+        Roles="@(RemoteDebuggerConnectorRoles)"
+        EndpointName="Microsoft.WindowsAzure.Plugins.RemoteDebugger.FileUpload"
+        LocalPort="32398"
+        PublicPortStartFrom="32400"
+        Protocol="tcp" />
+    
+  </Target>
+  
+</Project>

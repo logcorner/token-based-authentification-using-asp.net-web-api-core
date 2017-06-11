@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TokenAuthWebApiCore.Server.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -35,9 +34,11 @@ namespace TokenAuthWebApiCore.Server
 			services.AddSingleton(Configuration);
 			// Add framework services.
 			services.AddMvc();
-			services.AddDbContext<SecurityContext>(options =>
-					options.UseSqlServer(Configuration.GetConnectionString("SecurityConnection"), sqlOptions => sqlOptions.MigrationsAssembly("TokenAuthWebApiCore.Server")));
-			
+			//services.AddDbContext<SecurityContext>(options =>
+			//		options.UseSqlServer(Configuration.GetConnectionString("SecurityConnection"), sqlOptions => sqlOptions.MigrationsAssembly("TokenAuthWebApiCore.Server")));
+			SetUpDataBase(services);
+
+
 			services.AddIdentity<MyUser, MyRole>(cfg =>
 			{
 				// if we are accessing the /api and an unauthorized request is made
@@ -56,6 +57,17 @@ namespace TokenAuthWebApiCore.Server
 			.AddDefaultTokenProviders();
 		}
 
+		public virtual void SetUpDataBase(IServiceCollection services)
+		{
+			// Add framework services.
+				services.AddDbContext<SecurityContext>(options =>
+					options.UseSqlServer(Configuration.GetConnectionString("SecurityConnection"), sqlOptions => sqlOptions.MigrationsAssembly("TokenAuthWebApiCore.Server")));
+		}
+		public virtual void EnsureDatabaseCreated(SecurityContext dbContext)
+		{
+			// run Migrations
+			dbContext.Database.Migrate();
+		}
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -82,7 +94,15 @@ namespace TokenAuthWebApiCore.Server
 			{
 				
 			});
-			
+
+			// within your Configure method:
+			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+			  .CreateScope())
+			{
+				var dbContext = serviceScope.ServiceProvider.GetService<SecurityContext>();
+				EnsureDatabaseCreated(dbContext);
+			}
+
 		}
     }
 }

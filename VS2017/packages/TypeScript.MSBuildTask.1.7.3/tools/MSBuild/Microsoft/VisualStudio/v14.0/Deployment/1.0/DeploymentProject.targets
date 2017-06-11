@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <ProjectCapability Include="ProjectReferences;ReferencesFolder;SDKReferences" />
+    <ProjectCapability Include="ProjectConfigurationsDeclaredAsItems" />
+  </ItemGroup>
+  
+  <!-- Describes the rules files used by CPS to represent the project -->
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\general.xaml;">
+      <Context>;Project</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\general.browseobject.xaml">
+      <Context>;BrowseObject</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="
+                        $(MSBuildThisFileDirectory)Rules\ProjectReference.xaml;
+                        ">
+      <Context>;BrowseObject</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="
+                        $(MSBuildThisFileDirectory)Rules\ResolvedProjectReference.xaml;
+                        ">
+      <Context>ProjectSubscriptionService;BrowseObject</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\ProjectItemsSchema.xaml;"/>
+
+    <PropertyPageSchema Include="
+                        $(MSBuildThisFileDirectory)Rules\none.xaml;
+                        $(MSBuildThisFileDirectory)Rules\content.xaml;
+                        $(MSBuildThisFileDirectory)Rules\folder.xaml;
+                        ">
+      <Context>File;BrowseObject</Context>
+    </PropertyPageSchema>
+
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\SCC.xaml;">
+      <Context>Invisible</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- The default content type as defined within Rules\ProjectItemsSchema.xaml -->
+    <DefaultContentType>Default</DefaultContentType>
+  </PropertyGroup>
+
+</Project>

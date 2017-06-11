@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://schemas.microsoft.com/SSDT/SqlTasks/SchemaCompare.xsd"
+    xmlns="http://schemas.microsoft.com/SSDT/SqlTasks/SchemaCompare.xsd">
+
+  <!--Redefine ResultType, GroupType, ChildrenEntiesType, and DiffEntryType-->
+  <xs:redefine schemaLocation="Microsoft.Data.Tools.Tasks.SchemaCompare.CommonTypes.xsd">
+
+    <xs:complexType name="DiffEntryType">
+      <xs:complexContent>
+        <xs:extension base="DiffEntryType">
+          <xs:sequence>
+            <xs:element name="MyResult">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name ="MySource" type="SourceValueType"/>
+                  <xs:element name ="MyTarget" type="TargetValueType"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="MyOrderChanged" type ="OrderChangedType"/>
+            <xs:element name="MyOrdinal" type ="OrdinalType"/>
+            <xs:element name="MyContainsOrderChanged" type ="ContainsOrderChangedType"/>
+            <xs:element name="MySiblingOrderChanged" type ="SiblingOrderChangedType"/>
+            <xs:element name="MyRefactored" type ="RefactoredType"/>
+            <xs:element name="MyChildRefactored" type ="ChildRefactoredType"/>
+            <xs:element name="MyInclusionState" type ="InclusionStateType"/>
+            <!--      Make sure ChildrenEntiesType element is nested inside a DiffEntryType element, otherwise it will not include all DiffEntry recursively. -->
+            <xs:element name="MyChildren" type="ChildrenEntiesType"/>
+          </xs:sequence>
+          <xs:attribute name="MyUpdate" type="UpdateCategoryType"/>
+          <xs:attribute name="MyName" type="DisplayNameType"/>
+          <xs:attribute name="MyType" type="EntryTypeType"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ChildrenEntiesType">
+      <xs:complexContent>
+        <xs:extension base="ChildrenEntiesType">
+          <xs:sequence>
+            <xs:element name="MyEntry" type="DiffEntryType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="GroupType">
+      <xs:complexContent>
+        <xs:extension base="GroupType">
+          <xs:sequence>
+            <xs:element name="MyEntry" type="DiffEntryType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute name="Value" type="GroupByVauleType"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ResultType">
+      <xs:complexContent>
+        <xs:extension base="ResultType">
+          <xs:sequence>
+            <xs:element name="MyGroup" type="GroupType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute name="MyGroupBy" type="GroupByCategoryType"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+    
+  </xs:redefine>
+
+  
+  <xs:element name="Result" type="ResultType"/>
+
+</xs:schema>

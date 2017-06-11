@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule Name="TypeScriptBuild" DisplayName="TypeScript Yapısı" PageTemplate="generic" Description="TypeScript Yapısı" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="TypeScriptBuild" DisplayName="TypeScript Yapısı"/>
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration"/>
+  </Rule.DataSource>
+
+  <EnumProperty Name="TypeScriptTarget" DisplayName="ECMAScript sürümü" Category="TypeScriptBuild" Description="Oluşturulan JavaScript için kullanılacak ECMAScript sürümü">
+    <EnumValue Name="ES3" DisplayName="ECMAScript 3"/>
+    <EnumValue Name="ES5" DisplayName="ECMAScript 5"/>
+    <EnumValue Name="ES6" DisplayName="ECMAScript 6"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptCompileOnSaveEnabled" DisplayName="Kaydederken derle" Category="TypeScriptBuild" Description="Kaydederken kaynakları yeniden derle">
+    <EnumValue Name="true" DisplayName="Evet"/>
+    <EnumValue Name="false" DisplayName="Hayır"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptNoImplicitAny" DisplayName="Örtük 'any' türlerine izin ver" Category="TypeScriptBuild" Description="Örtük Any türüne sahip ifade ve bildirimlerde uyarıları gizle">
+    <EnumValue Name="false" DisplayName="Evet"/>
+    <EnumValue Name="true" DisplayName="Hayır"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptModuleKind" DisplayName="Modül sistemi" Category="TypeScriptBuild" Description="Dış modül kodu oluşturma hedefi">
+    <EnumValue Name="none" DisplayName="Yok"/>
+    <EnumValue Name="amd" DisplayName="AMD"/>
+    <EnumValue Name="commonjs" DisplayName="CommonJS"/>
+    <EnumValue Name="umd" DisplayName="UMD"/>
+    <EnumValue Name="system" DisplayName="Sistem"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptRemoveComments" DisplayName="JavaScript çıkışında açıklamaları sakla" Category="TypeScriptBuild" Description="Açıklamaları çıkışa yay">
+    <EnumValue Name="false" DisplayName="Evet"/>
+    <EnumValue Name="true" DisplayName="Hayır"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptOutFile" DisplayName="JavaScript çıkışını dosyaya birleştir" Category="TypeScriptBuild" Description="Çıkışı bir dosyaya yeniden yönlendir"/>
+
+  <StringProperty Name="TypeScriptOutDir" DisplayName="JavaScript çıkışını dizine yeniden yönlendir" Category="TypeScriptBuild" Description="Çıkışı kaynaklardan farklı bir dizine yeniden yönlendir"/>
+
+  <EnumProperty Name="TypeScriptGeneratesDeclarations" DisplayName="Bildirim dosyaları oluştur" Category="TypeScriptBuild" Description="İlgili d.ts dosyasını oluştur">
+    <EnumValue Name="true" DisplayName="Evet"/>
+    <EnumValue Name="false" DisplayName="Hayır"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptSourceMap" DisplayName="Kaynak haritaları oluştur" Category="TypeScriptBuild" Description="İlgili .map dosyasını oluşturur">
+    <EnumValue Name="true" DisplayName="Evet"/>
+    <EnumValue Name="false" DisplayName="Hayır"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptMapRoot" DisplayName="Kaynak haritalarının kök dizinini belirt" Category="TypeScriptBuild" Description="Kaynak haritalarını hata ayıklanırken kaynak haritası kökünde bulunacak şekilde yayar"/>
+
+  <StringProperty Name="TypeScriptSourceRoot" DisplayName="TypeScript dosyalarının kök dizinini belirt" Category="TypeScriptBuild" Description="Kaynakları hata ayıklanırken kaynak kökünde bulunacak şekilde yayar"/>
+
+  <EnumProperty Name="TypeScriptNoEmitOnError" DisplayName="Hata olduğunda gönder" Category="TypeScriptBuild" Description="Hata bildirildiğinde çıktı gönder">
+    <EnumValue Name="true" DisplayName="Hayır"/>
+    <EnumValue Name="false" DisplayName="Evet"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptJSXEmit" DisplayName=".tsx dosyaları için derleme modu" Category="TypeScriptBuild" Description=".tsx dosyaları için JSX kodu derleme modu belirtin. Bu, .ts dosyalarını etkilemez">
+    <EnumValue Name="none" DisplayName="Hiçbiri"/>
+    <EnumValue Name="preserve" DisplayName="JSX öğelerini koru"/>
+    <EnumValue Name="react" DisplayName="JSX öğeleri için React çağrısını göster"/>
+  </EnumProperty>
+</Rule>

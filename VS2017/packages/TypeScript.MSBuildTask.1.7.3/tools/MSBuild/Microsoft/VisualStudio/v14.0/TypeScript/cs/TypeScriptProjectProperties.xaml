@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule Name="TypeScriptBuild" DisplayName="Build TypeScriptu" PageTemplate="generic" Description="Build TypeScriptu" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="TypeScriptBuild" DisplayName="Build TypeScriptu"/>
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration"/>
+  </Rule.DataSource>
+
+  <EnumProperty Name="TypeScriptTarget" DisplayName="Verze ECMAScriptu" Category="TypeScriptBuild" Description="Verze ECMAScriptu, která se má použít pro generovaný JavaScript">
+    <EnumValue Name="ES3" DisplayName="ECMAScript 3"/>
+    <EnumValue Name="ES5" DisplayName="ECMAScript 5"/>
+    <EnumValue Name="ES6" DisplayName="ECMAScript 6"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptCompileOnSaveEnabled" DisplayName="Zkompilovat při uložení" Category="TypeScriptBuild" Description="Překompiluje zdrojový kód při uložení.">
+    <EnumValue Name="true" DisplayName="Ano"/>
+    <EnumValue Name="false" DisplayName="Ne"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptNoImplicitAny" DisplayName="Povolit implicitní typy any" Category="TypeScriptBuild" Description="Potlačí upozornění na výrazy a deklarace s implikovaným typem any.">
+    <EnumValue Name="false" DisplayName="Ano"/>
+    <EnumValue Name="true" DisplayName="Ne"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptModuleKind" DisplayName="Systém modulů" Category="TypeScriptBuild" Description="Cíl generování kódu externího modulu">
+    <EnumValue Name="none" DisplayName="Žádný"/>
+    <EnumValue Name="amd" DisplayName="AMD"/>
+    <EnumValue Name="commonjs" DisplayName="CommonJS"/>
+    <EnumValue Name="umd" DisplayName="UMD"/>
+    <EnumValue Name="system" DisplayName="Systém"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptRemoveComments" DisplayName="Ponechat komentáře ve výstupu JavaScriptu" Category="TypeScriptBuild" Description="Generuje komentáře do výstupu.">
+    <EnumValue Name="false" DisplayName="Ano"/>
+    <EnumValue Name="true" DisplayName="Ne"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptOutFile" DisplayName="Kombinovat výstup JavaScriptu do souboru" Category="TypeScriptBuild" Description="Přesměruje výstup do souboru."/>
+
+  <StringProperty Name="TypeScriptOutDir" DisplayName="Přesměrovat výstup JavaScriptu do adresáře" Category="TypeScriptBuild" Description="Přesměruje výstup do jiného adresáře než zdrojový kód."/>
+
+  <EnumProperty Name="TypeScriptGeneratesDeclarations" DisplayName="Generovat soubory deklarací" Category="TypeScriptBuild" Description="Generuje odpovídající soubor d.ts.">
+    <EnumValue Name="true" DisplayName="Ano"/>
+    <EnumValue Name="false" DisplayName="Ne"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptSourceMap" DisplayName="Generovat zdrojová mapování" Category="TypeScriptBuild" Description="Generuje odpovídající soubor .map.">
+    <EnumValue Name="true" DisplayName="Ano"/>
+    <EnumValue Name="false" DisplayName="Ne"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptMapRoot" DisplayName="Zadat kořenový adresář zdrojových mapování" Category="TypeScriptBuild" Description="Generuje zdrojová mapování tak, že se při ladění zdrojová mapování umístí do kořenového adresáře zdrojových mapování."/>
+
+  <StringProperty Name="TypeScriptSourceRoot" DisplayName="Zadat kořenový adresář souborů TypeScriptu" Category="TypeScriptBuild" Description="Generuje zdrojová mapování tak, že se při ladění zdrojový kód umístí do kořenového adresáře zdrojového kódu."/>
+
+  <EnumProperty Name="TypeScriptNoEmitOnError" DisplayName="Generování při chybě" Category="TypeScriptBuild" Description="Generují se výstupy, když jsou ohlášené jakékoli chyby.">
+    <EnumValue Name="true" DisplayName="Ne"/>
+    <EnumValue Name="false" DisplayName="Ano"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptJSXEmit" DisplayName="Režim kompilace pro soubory .tsx" Category="TypeScriptBuild" Description="Určuje režim kompilace kódu JSX pro soubory .tsx. Nemá to vliv na soubory .ts.">
+    <EnumValue Name="none" DisplayName="Žádné"/>
+    <EnumValue Name="preserve" DisplayName="Zachovat elementy JSX"/>
+    <EnumValue Name="react" DisplayName="Vydat volání React pro elementy JSX"/>
+  </EnumProperty>
+</Rule>

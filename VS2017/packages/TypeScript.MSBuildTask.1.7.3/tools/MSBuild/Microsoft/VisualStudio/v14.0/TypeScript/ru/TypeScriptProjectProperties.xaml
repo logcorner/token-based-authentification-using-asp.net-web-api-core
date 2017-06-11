@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule Name="TypeScriptBuild" DisplayName="Сборка TypeScript" PageTemplate="generic" Description="Сборка TypeScript" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="TypeScriptBuild" DisplayName="Сборка TypeScript"/>
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration"/>
+  </Rule.DataSource>
+
+  <EnumProperty Name="TypeScriptTarget" DisplayName="Версия ECMAScript" Category="TypeScriptBuild" Description="Версия ECMAScript, которую следует использовать для создаваемых сценариев JavaScript">
+    <EnumValue Name="ES3" DisplayName="ECMAScript 3"/>
+    <EnumValue Name="ES5" DisplayName="ECMAScript 5"/>
+    <EnumValue Name="ES6" DisplayName="ECMAScript 6"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptCompileOnSaveEnabled" DisplayName="Компилировать при сохранении" Category="TypeScriptBuild" Description="Перекомпилировать исходные файлы при сохранении">
+    <EnumValue Name="true" DisplayName="Да"/>
+    <EnumValue Name="false" DisplayName="Нет"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptNoImplicitAny" DisplayName="Разрешить неявные типы any" Category="TypeScriptBuild" Description="Отключить предупреждения о выражениях и объявлениях, имеющих неявный тип any">
+    <EnumValue Name="false" DisplayName="Да"/>
+    <EnumValue Name="true" DisplayName="Нет"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptModuleKind" DisplayName="Модульная система" Category="TypeScriptBuild" Description="Назначение для создания кода внешнего модуля">
+    <EnumValue Name="none" DisplayName="Нет"/>
+    <EnumValue Name="amd" DisplayName="AMD"/>
+    <EnumValue Name="commonjs" DisplayName="CommonJS"/>
+    <EnumValue Name="umd" DisplayName="UMD"/>
+    <EnumValue Name="system" DisplayName="Система"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptRemoveComments" DisplayName="Сохранять комментарии в выходных данных JavaScript" Category="TypeScriptBuild" Description="Создавать комментарии в выходных данных">
+    <EnumValue Name="false" DisplayName="Да"/>
+    <EnumValue Name="true" DisplayName="Нет"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptOutFile" DisplayName="Объединить выходные данные JavaScript в файл" Category="TypeScriptBuild" Description="Перенаправлять выходные данные в файл"/>
+
+  <StringProperty Name="TypeScriptOutDir" DisplayName="Перенаправлять выходные данные JavaScript в каталог" Category="TypeScriptBuild" Description="Перенаправлять выходные данные в каталог, отличный от исходного"/>
+
+  <EnumProperty Name="TypeScriptGeneratesDeclarations" DisplayName="Создать файлы объявления" Category="TypeScriptBuild" Description="Создать соответствующий файл d.ts">
+    <EnumValue Name="true" DisplayName="Да"/>
+    <EnumValue Name="false" DisplayName="Нет"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptSourceMap" DisplayName="Создать сопоставления источника" Category="TypeScriptBuild" Description="Создает соответствующий файл .map">
+    <EnumValue Name="true" DisplayName="Да"/>
+    <EnumValue Name="false" DisplayName="Нет"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptMapRoot" DisplayName="Укажите корневой каталог сопоставлений источника" Category="TypeScriptBuild" Description="Создает сопоставления источника так, что при отладке они будут находиться в корневом каталоге сопоставлений источника"/>
+
+  <StringProperty Name="TypeScriptSourceRoot" DisplayName="Укажите корневой каталог файлов TypeScript" Category="TypeScriptBuild" Description="Создает сопоставления источника так, что при отладке исходные файлы будут находиться в корневом каталоге исходных файлов"/>
+
+  <EnumProperty Name="TypeScriptNoEmitOnError" DisplayName="Выводить при ошибке" Category="TypeScriptBuild" Description="Выводить выходные элементы, если есть ошибки">
+    <EnumValue Name="true" DisplayName="Нет"/>
+    <EnumValue Name="false" DisplayName="Да"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptJSXEmit" DisplayName="Режим компиляции для TSX-файлов" Category="TypeScriptBuild" Description="Укажите режим компиляции кода JSX для TSX-файлов (это не затронет TS-файлы)">
+    <EnumValue Name="none" DisplayName="Нет"/>
+    <EnumValue Name="preserve" DisplayName="Сохранение элементов JSX"/>
+    <EnumValue Name="react" DisplayName="Вызов ответного действия для элементов JSX"/>
+  </EnumProperty>
+</Rule>

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenAuthWebApiCore.Server", "TokenAuthWebApiCore.Server\TokenAuthWebApiCore.Server.csproj", "{8525F375-152C-48F9-ACCD-35C63BD1F6F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenAuthWebApiCore.Server.IntegrationTest", "TokenAuthWebApiCore.Server.IntegrationTest\TokenAuthWebApiCore.Server.IntegrationTest.csproj", "{01DF07E1-BEC9-4B7E-B1A7-6871AD917294}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8525F375-152C-48F9-ACCD-35C63BD1F6F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8525F375-152C-48F9-ACCD-35C63BD1F6F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8525F375-152C-48F9-ACCD-35C63BD1F6F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01DF07E1-BEC9-4B7E-B1A7-6871AD917294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01DF07E1-BEC9-4B7E-B1A7-6871AD917294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01DF07E1-BEC9-4B7E-B1A7-6871AD917294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01DF07E1-BEC9-4B7E-B1A7-6871AD917294}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

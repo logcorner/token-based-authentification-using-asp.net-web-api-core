@@ -3,3 +3,4 @@
 ################################################################################
 
 /VS2015/TokenAuthWebApiCore.Server/src
+/VS2017/TokenAuthWebApiCore.Server.IntegrationTest/obj

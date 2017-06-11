@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule Name="TypeScriptCompile" DisplayName="File TypeScript" PageTemplate="generic" Description="File TypeScript" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="General" DisplayName="Generale"/>
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" HasConfigurationCondition="false" ItemType="TypeScriptCompile"/>
+  </Rule.DataSource>
+
+  <EnumProperty Name="{}{ItemType}" DisplayName="Azione pacchetto" Category="General" F1Keyword="javascript.project.property.packageaction" Description="Specifica l'azione eseguita su questo file quando viene prodotto un pacchetto dell'app.">
+    <EnumValue Name="None" DisplayName="Nessuna"/>
+    <EnumValue Name="Content" DisplayName="Contenuto"/>
+    <EnumValue Name="AppxManifest" DisplayName="Manifesto dell'app"/>
+    <EnumValue Name="PRIResource" DisplayName="Risorsa"/>
+    <EnumValue Name="TypeScriptCompile" DisplayName="TypeScriptCompile"/>
+
+    <EnumProperty.DataSource>
+      <DataSource Persistence="ProjectFile" Label="Configuration" SourceType="Item" ItemType="TypeScriptCompile" HasConfigurationCondition="false"/>
+    </EnumProperty.DataSource>
+  </EnumProperty>
+
+  <EnumProperty Name="CopyToOutputDirectory" DisplayName="Copia nella directory di output" Category="General" F1Keyword="javascript.project.property.copytooutputdirectory" Description="Specifica se il file deve essere copiato nella cartella di output.">
+    <EnumValue Name="Never" DisplayName="Non copiare"/>
+    <EnumValue Name="Always" DisplayName="Copia sempre"/>
+    <EnumValue Name="PreserveNewest" DisplayName="Copia se più recente"/>
+  </EnumProperty>
+
+  <StringProperty Name="Identity" DisplayName="Nome file" ReadOnly="true" Category="General" F1Keyword="javascript.project.property.filename" Description="Nome del file o della cartella.">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="TypeScriptCompile" PersistedName="Identity"/>
+    </StringProperty.DataSource>
+  </StringProperty>
+
+  <StringProperty Name="FullPath" DisplayName="Percorso completo" ReadOnly="true" Category="General" F1Keyword="javascript.project.property.fullpath" Description="Percorso del file.">
+    <StringProperty.DataSource>
+      <DataSource Persistence="Intrinsic" ItemType="TypeScriptCompile" PersistedName="FullPath"/>
+    </StringProperty.DataSource>
+  </StringProperty>
+
+  <BoolProperty Name="Visible" Visible="false"/>
+  <StringProperty Name="DependentUpon" Visible="false"/>
+  <StringProperty Name="Link" Visible="false"/>
+  <EnumProperty Name="SubType" Visible="false">
+    <EnumValue Name="Designer"/>
+  </EnumProperty>
+</Rule>

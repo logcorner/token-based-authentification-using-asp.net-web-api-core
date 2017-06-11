@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://schemas.microsoft.com/SSDT/SqlTasks/SchemaCompare.xsd"
+    xmlns="http://schemas.microsoft.com/SSDT/SqlTasks/SchemaCompare.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+<!--  These are pre-defined types, SqlSchemaCompareTask looks for these types in comparison
+result. These types can be used as element type and attribute type.-->
+  
+  <xs:simpleType name="SourceValueType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="SourceValueWithoutSchemaType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="TargetValueType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="TargetValueWithoutSchemaType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="UpdateCategoryType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="DisplayNameType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="EntryTypeType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="OrderChangedType">
+    <xs:restriction base="xs:boolean" />
+  </xs:simpleType>
+  <xs:simpleType name="OrdinalType">
+    <xs:restriction base="xs:integer" />
+  </xs:simpleType>
+  <xs:simpleType name="ContainsOrderChangedType">
+    <xs:restriction base="xs:boolean" />
+  </xs:simpleType>
+  <xs:simpleType name="SiblingOrderChangedType">
+    <xs:restriction base="xs:boolean" />
+  </xs:simpleType>
+  <xs:simpleType name="RefactoredType">
+    <xs:restriction base="xs:boolean" />
+  </xs:simpleType>
+  <xs:simpleType name="ChildRefactoredType">
+    <xs:restriction base="xs:boolean" />
+  </xs:simpleType>
+  <xs:simpleType name="InclusionStateType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="GroupByCategoryType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  <xs:simpleType name="GroupByVauleType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+  
+  <!-- Type name (ResultType, GroupType, ChildrenEntiesType, and DiffEntryType) are reserved,
+     but you can change the internal structure.-->
+  <xs:complexType name ="ResultType" />
+  <xs:complexType name ="GroupType" />
+  <xs:complexType name ="ChildrenEntiesType" />
+  <xs:complexType name ="DiffEntryType"/>
+
+ </xs:schema>

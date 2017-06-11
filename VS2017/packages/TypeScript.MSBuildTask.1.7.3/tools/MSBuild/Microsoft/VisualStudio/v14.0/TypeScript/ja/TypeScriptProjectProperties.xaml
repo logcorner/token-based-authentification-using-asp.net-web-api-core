@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+<Rule Name="TypeScriptBuild" DisplayName="TypeScript ビルド" PageTemplate="generic" Description="TypeScript ビルド" xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+  <Rule.Categories>
+    <Category Name="TypeScriptBuild" DisplayName="TypeScript ビルド"/>
+  </Rule.Categories>
+
+  <Rule.DataSource>
+    <DataSource Persistence="ProjectFile" Label="Configuration"/>
+  </Rule.DataSource>
+
+  <EnumProperty Name="TypeScriptTarget" DisplayName="ECMAScript バージョン" Category="TypeScriptBuild" Description="生成された JavaScript に使用するECMAScript バージョン">
+    <EnumValue Name="ES3" DisplayName="ECMAScript 3"/>
+    <EnumValue Name="ES5" DisplayName="ECMAScript 5"/>
+    <EnumValue Name="ES6" DisplayName="ECMAScript 6"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptCompileOnSaveEnabled" DisplayName="保存時にコンパイルする" Category="TypeScriptBuild" Description="保存時にソースを再コンパイルする">
+    <EnumValue Name="true" DisplayName="はい"/>
+    <EnumValue Name="false" DisplayName="いいえ"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptNoImplicitAny" DisplayName="暗黙的な 'any' 型を許可する" Category="TypeScriptBuild" Description="暗黙的な Any 型を含む式と宣言に関する警告を表示しない">
+    <EnumValue Name="false" DisplayName="はい"/>
+    <EnumValue Name="true" DisplayName="いいえ"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptModuleKind" DisplayName="モジュール システム" Category="TypeScriptBuild" Description="外部モジュールコード生成ターゲット">
+    <EnumValue Name="none" DisplayName="なし"/>
+    <EnumValue Name="amd" DisplayName="AMD"/>
+    <EnumValue Name="commonjs" DisplayName="CommonJS"/>
+    <EnumValue Name="umd" DisplayName="UMD"/>
+    <EnumValue Name="system" DisplayName="システム"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptRemoveComments" DisplayName="JavaScript 出力にコメントを残す" Category="TypeScriptBuild" Description="コメントを出力する">
+    <EnumValue Name="false" DisplayName="はい"/>
+    <EnumValue Name="true" DisplayName="いいえ"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptOutFile" DisplayName="JavaScript 出力をファイルにまとめる" Category="TypeScriptBuild" Description="出力をファイルにリダイレクトする"/>
+
+  <StringProperty Name="TypeScriptOutDir" DisplayName="JavaScript 出力をディレクトリにリダイレクトする" Category="TypeScriptBuild" Description="出力をソース以外のディレクトリにリダイレクトする"/>
+
+  <EnumProperty Name="TypeScriptGeneratesDeclarations" DisplayName="宣言ファイルを生成する" Category="TypeScriptBuild" Description="対応する d.ts ファイルを生成する">
+    <EnumValue Name="true" DisplayName="はい"/>
+    <EnumValue Name="false" DisplayName="いいえ"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptSourceMap" DisplayName="ソース マップを生成する" Category="TypeScriptBuild" Description="対応する .map ファイルを生成する">
+    <EnumValue Name="true" DisplayName="はい"/>
+    <EnumValue Name="false" DisplayName="いいえ"/>
+  </EnumProperty>
+
+  <StringProperty Name="TypeScriptMapRoot" DisplayName="ソース マップのルート ディレクトリを指定する" Category="TypeScriptBuild" Description="デバッグ中のソースマップがソースマップ ルートに配置されるようにソースマップを出力する"/>
+
+  <StringProperty Name="TypeScriptSourceRoot" DisplayName="TypeScript ファイルのルート ディレクトリを指定する" Category="TypeScriptBuild" Description="デバッグ中のソースがソース ルートに配置されるようにソースマップを出力する"/>
+
+  <EnumProperty Name="TypeScriptNoEmitOnError" DisplayName="エラー時に発行" Category="TypeScriptBuild" Description="エラーが報告された場合は常に出力を発行します">
+    <EnumValue Name="true" DisplayName="いいえ"/>
+    <EnumValue Name="false" DisplayName="はい"/>
+  </EnumProperty>
+
+  <EnumProperty Name="TypeScriptJSXEmit" DisplayName=".tsx ファイルのコンパイル モード" Category="TypeScriptBuild" Description=".tsx ファイルの JSX コード コンパイル モードを指定します。.ts ファイルへの影響はありません">
+    <EnumValue Name="none" DisplayName="なし"/>
+    <EnumValue Name="preserve" DisplayName="JSX 要素の保持"/>
+    <EnumValue Name="react" DisplayName="JSX 要素の反応呼び出しを生成"/>
+  </EnumProperty>
+</Rule>
